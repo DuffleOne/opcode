@@ -59,8 +59,8 @@ func (os *OS) Println(o interface{}) {
 	}
 }
 
-func (os *OS) StdOut() string {
-	return strings.Join(os.stdOut, "\n")
+func (os *OS) StdOut(seperator string) string {
+	return strings.Join(os.stdOut, seperator)
 }
 
 func (os *OS) WriteOut() {
