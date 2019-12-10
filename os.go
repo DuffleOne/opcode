@@ -9,6 +9,7 @@ import (
 type OS struct {
 	Memory       *MemoryStore
 	Applications map[int]*Application
+	stdOut       []string
 }
 
 func BootFromString(start string, apps []*Application) (*OS, error) {
@@ -35,6 +36,7 @@ func Boot(memoryToLoad []int, apps []*Application) *OS {
 
 	os := &OS{
 		Memory: ms,
+		stdOut: []string{},
 	}
 
 	for _, app := range apps {
@@ -44,6 +46,27 @@ func Boot(memoryToLoad []int, apps []*Application) *OS {
 	os.Applications = maps
 
 	return os
+}
+
+func (os *OS) Println(o interface{}) {
+	switch v := o.(type) {
+	case int:
+		os.stdOut = append(os.stdOut, strconv.Itoa(v))
+	case string:
+		os.stdOut = append(os.stdOut, v)
+	default:
+		panic(fmt.Errorf("cannot push item of %t to []string", o))
+	}
+}
+
+func (os *OS) StdOut() string {
+	return strings.Join(os.stdOut, "\n")
+}
+
+func (os *OS) WriteOut() {
+	for _, s := range os.stdOut {
+		fmt.Println(s)
+	}
 }
 
 func (os *OS) Run() error {
