@@ -1,8 +1,9 @@
 package opcode
 
 type MemoryStore struct {
-	cursor int
-	v      []int
+	cursor       int
+	RelativeBase int
+	v            []int
 }
 
 func newMemStore(start []int) *MemoryStore {
@@ -22,6 +23,8 @@ func (ms *MemoryStore) GetAt(pos, paramMode int) int {
 		return ms.Get(ms.Get(pos))
 	case 1:
 		return ms.Get(pos)
+	case 2:
+		return ms.Get(ms.Get(pos) + ms.RelativeBase)
 	default:
 		return 0
 	}

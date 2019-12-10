@@ -17,6 +17,7 @@ var DefaultApps = []*opcode.Application{
 	applications.JumpIfFalse,
 	applications.LessThan,
 	applications.Equals,
+	applications.AdjustRelativeBase,
 }
 
 func main() {
