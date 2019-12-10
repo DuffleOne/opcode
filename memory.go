@@ -6,10 +6,25 @@ type MemoryStore struct {
 	v            []int
 }
 
-func newMemStore(start []int) *MemoryStore {
+func NewMemStore(start []int, defaultSize *int) *MemoryStore {
+	if defaultSize == nil {
+		return &MemoryStore{
+			cursor: 0,
+			v:      start,
+		}
+	}
+
+	size := *defaultSize
+
+	s := make([]int, size)
+
+	for k, v := range start {
+		s[k] = v
+	}
+
 	return &MemoryStore{
 		cursor: 0,
-		v:      start,
+		v:      s,
 	}
 }
 

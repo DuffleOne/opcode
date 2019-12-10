@@ -30,7 +30,7 @@ func BootFromString(start string, apps []*Application) (*OS, error) {
 }
 
 func Boot(memoryToLoad []int, apps []*Application) *OS {
-	ms := newMemStore(memoryToLoad)
+	ms := NewMemStore(memoryToLoad, IntP(1024))
 
 	maps := map[int]*Application{}
 
@@ -102,16 +102,40 @@ func (os *OS) Run() error {
 	return nil
 }
 
-func (os *OS) Dump() string {
+func (os *OS) Dump(trimBy *int) string {
+	lastFilledByte := 0
+	var use []string
 	var all []string
 
-	for _, i := range os.Memory.All() {
+	for k, i := range os.Memory.All() {
+		if i != 0 {
+			lastFilledByte = k
+		}
 		all = append(all, strconv.Itoa(i))
 	}
 
-	return strings.Join(all, ",")
+	if trimBy != nil {
+		use = copyTo(all, lastFilledByte+*trimBy)
+	}
+
+	return strings.Join(use, ",")
 }
 
 func IntP(i int) *int {
 	return &i
+}
+
+func copyTo(in []string, to int) []string {
+	var new []string
+
+	if to+1 > len(in) || to+1 == len(in) {
+		return in
+	}
+
+	for i := 0; i < to+1; i++ {
+		v := in[i]
+		new = append(new, v)
+	}
+
+	return new
 }
