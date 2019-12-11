@@ -9,8 +9,7 @@ type MemoryStore struct {
 func NewMemStore(start []int, defaultSize *int) *MemoryStore {
 	if defaultSize == nil {
 		return &MemoryStore{
-			cursor: 0,
-			v:      start,
+			v: start,
 		}
 	}
 
@@ -23,23 +22,22 @@ func NewMemStore(start []int, defaultSize *int) *MemoryStore {
 	}
 
 	return &MemoryStore{
-		cursor: 0,
-		v:      s,
+		v: s,
 	}
 }
 
-func (ms *MemoryStore) Get(pos int) int {
-	return ms.v[pos]
+func (ms *MemoryStore) GetAt(pos, paramMode int) int {
+	return ms.v[ms.GetIndex(pos, paramMode)]
 }
 
-func (ms *MemoryStore) GetAt(pos, paramMode int) int {
+func (ms *MemoryStore) GetIndex(pos, paramMode int) int {
 	switch paramMode {
-	case 0:
-		return ms.Get(ms.Get(pos))
-	case 1:
-		return ms.Get(pos)
-	case 2:
-		return ms.Get(ms.Get(pos) + ms.RelativeBase)
+	case PositionMode:
+		return ms.v[pos]
+	case ImmediateMde:
+		return pos
+	case RelativeMode:
+		return ms.v[pos] + ms.RelativeBase
 	default:
 		return 0
 	}

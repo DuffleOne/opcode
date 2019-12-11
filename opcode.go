@@ -2,7 +2,14 @@ package opcode
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
+)
+
+const (
+	PositionMode = 0
+	ImmediateMde = 1
+	RelativeMode = 2
 )
 
 type OPCode struct {
@@ -54,6 +61,10 @@ func BuildOPCode(in int) (*OPCode, error) {
 	}
 
 	return code, err
+}
+
+func (oc *OPCode) String() string {
+	return fmt.Sprintf("%d%d%d%02d", oc.Param3Mode, oc.Param2Mode, oc.Param1Mode, oc.Code)
 }
 
 func getAt(in string, higher, lower int) (int, error) {

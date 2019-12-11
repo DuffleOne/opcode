@@ -32,7 +32,13 @@ func makeInput() *opcode.Application {
 			return nil, err
 		}
 
-		p := os.Memory.Get(cursor + 1)
+		p := os.Memory.GetIndex(cursor+1, c.Param1Mode)
+
+		if os.Debug {
+			fmt.Printf("%02d (input): val: %d, ptr: %d\n", c.Code, val, p)
+			fmt.Printf("\t%d was %d, now %d\n", p, os.Memory.GetIndex(p, opcode.PositionMode), val)
+		}
+
 		os.Memory.Set(p, val)
 
 		return opcode.IntP(cursor + 2), nil

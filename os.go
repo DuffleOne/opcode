@@ -7,12 +7,13 @@ import (
 )
 
 type OS struct {
+	Debug        bool
 	Memory       *MemoryStore
 	Applications map[int]*Application
 	stdOut       []string
 }
 
-func BootFromString(start string, apps []*Application) (*OS, error) {
+func BootFromString(start string, apps []*Application, debug bool) (*OS, error) {
 	var mem []int
 
 	parts := strings.Split(start, ",")
@@ -26,15 +27,16 @@ func BootFromString(start string, apps []*Application) (*OS, error) {
 		mem = append(mem, n)
 	}
 
-	return Boot(mem, apps), nil
+	return Boot(mem, apps, debug), nil
 }
 
-func Boot(memoryToLoad []int, apps []*Application) *OS {
+func Boot(memoryToLoad []int, apps []*Application, debug bool) *OS {
 	ms := NewMemStore(memoryToLoad, IntP(1024))
 
 	maps := map[int]*Application{}
 
 	os := &OS{
+		Debug:  debug,
 		Memory: ms,
 		stdOut: []string{},
 	}
@@ -72,11 +74,13 @@ func (os *OS) WriteOut() {
 func (os *OS) Run() error {
 	for {
 		addr, b := os.Memory.Next()
-		opcode, err := BuildOPCode(os.Memory.Get(addr))
+		opcode, err := BuildOPCode(os.Memory.GetIndex(addr, PositionMode))
 		if err != nil {
 			return err
 		}
-		val := os.Memory.Get(addr)
+		if os.Debug {
+			fmt.Printf("cur: %d - current opcode: %02d, %s\n", addr, opcode.Code, opcode)
+		}
 		if app, ok := os.Applications[opcode.Code]; ok {
 			jumpto, err := app.Exec(os, opcode, addr)
 			if err != nil {
@@ -91,7 +95,7 @@ func (os *OS) Run() error {
 				os.Memory.Jump(*jumpto)
 			}
 		} else {
-			return fmt.Errorf("cannot find application for opcode %d", val)
+			return fmt.Errorf("cannot find application for opcode %d", opcode.Code)
 		}
 
 		if !b {
