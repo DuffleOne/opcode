@@ -31,7 +31,7 @@ func BootFromString(start string, apps []*Application, debug bool) (*OS, error) 
 }
 
 func Boot(memoryToLoad []int, apps []*Application, debug bool) *OS {
-	ms := NewMemStore(memoryToLoad, IntP(1024))
+	ms := NewMemStore(memoryToLoad, IntP(2048))
 
 	maps := map[int]*Application{}
 
