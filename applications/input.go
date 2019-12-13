@@ -2,11 +2,10 @@ package applications
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"opcode"
 	"os"
-	"strconv"
-	"strings"
 )
 
 var reader *bufio.Reader
@@ -19,17 +18,10 @@ func makeInput() *opcode.Application {
 	app := opcode.MakeApp(3)
 
 	app.Exec = func(os *opcode.OS, c *opcode.OPCode, cursor int) (*int, error) {
-		fmt.Print(">> ")
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			return nil, err
-		}
+		val, ok := os.InputHandler.GetInput()
 
-		input = strings.TrimSpace(input)
-
-		val, err := strconv.Atoi(input)
-		if err != nil {
-			return nil, err
+		if !ok {
+			return nil, errors.New("no input provided")
 		}
 
 		p := os.Memory.GetIndex(cursor+1, c.Param1Mode)

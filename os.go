@@ -10,13 +10,14 @@ type OS struct {
 	Debug        bool
 	Memory       *MemoryStore
 	Applications map[int]*Application
+	InputHandler *InputHandler
 	stdOut       []string
 }
 
-func BootFromString(start string, apps []*Application, debug bool) (*OS, error) {
+func BootFromString(debug bool, ih *InputHandler, apps []*Application, startMemory string) (*OS, error) {
 	var mem []int
 
-	parts := strings.Split(start, ",")
+	parts := strings.Split(startMemory, ",")
 
 	for _, p := range parts {
 		n, err := strconv.Atoi(p)
@@ -27,18 +28,28 @@ func BootFromString(start string, apps []*Application, debug bool) (*OS, error) 
 		mem = append(mem, n)
 	}
 
-	return Boot(mem, apps, debug), nil
+	return Boot(debug, ih, apps, mem), nil
 }
 
-func Boot(memoryToLoad []int, apps []*Application, debug bool) *OS {
-	ms := NewMemStore(memoryToLoad, IntP(2048))
+func Boot(debug bool, ih *InputHandler, apps []*Application, startMemory []int) *OS {
+	var err error
+
+	ms := NewMemStore(startMemory, IntP(2048))
 
 	maps := map[int]*Application{}
 
+	if ih == nil {
+		ih, err = NewInputHandler(ImmediateInputMode, nil)
+		if err != nil {
+			panic(fmt.Errorf("cannot make default input handler: %w", err))
+		}
+	}
+
 	os := &OS{
-		Debug:  debug,
-		Memory: ms,
-		stdOut: []string{},
+		Debug:        debug,
+		Memory:       ms,
+		stdOut:       []string{},
+		InputHandler: ih,
 	}
 
 	for _, app := range apps {
