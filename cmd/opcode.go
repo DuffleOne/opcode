@@ -5,7 +5,7 @@ import (
 	"opcode/applications"
 )
 
-var DefaultApps = []*opcode.Application{
+var DefaultApps = []opcode.Application{
 	applications.Halt,
 	applications.Add,
 	applications.Mul,

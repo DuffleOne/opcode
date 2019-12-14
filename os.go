@@ -9,12 +9,12 @@ import (
 type OS struct {
 	Debug        bool
 	Memory       *MemoryStore
-	Applications map[int]*Application
+	Applications map[int]Application
 	InputHandler *InputHandler
 	stdOut       []string
 }
 
-func BootFromString(debug bool, ih *InputHandler, apps []*Application, startMemory string) (*OS, error) {
+func BootFromString(debug bool, ih *InputHandler, apps []Application, startMemory string) (*OS, error) {
 	var mem []int
 
 	parts := strings.Split(startMemory, ",")
@@ -31,12 +31,12 @@ func BootFromString(debug bool, ih *InputHandler, apps []*Application, startMemo
 	return Boot(debug, ih, apps, mem), nil
 }
 
-func Boot(debug bool, ih *InputHandler, apps []*Application, startMemory []int) *OS {
+func Boot(debug bool, ih *InputHandler, apps []Application, startMemory []int) *OS {
 	var err error
 
 	ms := NewMemStore(startMemory, IntP(2048))
 
-	maps := map[int]*Application{}
+	maps := map[int]Application{}
 
 	if ih == nil {
 		ih, err = NewInputHandler(ImmediateInputMode, nil)
@@ -53,7 +53,8 @@ func Boot(debug bool, ih *InputHandler, apps []*Application, startMemory []int) 
 	}
 
 	for _, app := range apps {
-		maps[app.OPCode()] = app
+		code := app.Opcode()
+		maps[code] = app
 	}
 
 	os.Applications = maps

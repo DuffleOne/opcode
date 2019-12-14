@@ -4,14 +4,14 @@ import (
 	"opcode"
 )
 
-func makeHalt() *opcode.Application {
-	app := opcode.MakeApp(99)
+var Halt = &HaltApp{}
 
-	app.Exec = func(os *opcode.OS, _ *opcode.OPCode, cursor int) (*int, error) {
-		return opcode.IntP(cursor + 1), opcode.ErrHalt
-	}
+type HaltApp struct{}
 
-	return app
+func (a *HaltApp) Opcode() int {
+	return 99
 }
 
-var Halt *opcode.Application = makeHalt()
+func (a *HaltApp) Exec(os *opcode.OS, _ *opcode.OPCode, cursor int) (*int, error) {
+	return opcode.IntP(cursor + 1), opcode.ErrHalt
+}
