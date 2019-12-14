@@ -82,10 +82,10 @@ func TestMain(t *testing.T) {
 
 	for _, test := range tests {
 		var err error
-		var ih *opcode.InputHandler
+		var ih *os.InputHandler
 
 		if len(test.Input) > 0 {
-			ih, err = opcode.NewInputHandler(opcode.CachedInputMode, test.Input)
+			ih, err = os.NewInputHandler(os.CachedInputMode, test.Input)
 		}
 
 		if err != nil {

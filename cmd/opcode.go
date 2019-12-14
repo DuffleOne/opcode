@@ -24,7 +24,7 @@ var start = []int{1102, 34463338, 34463338, 63, 1007, 63, 34463338, 63, 1005, 63
 func main() {
 	debug := false
 
-	ih, err := opcode.NewInputHandler(opcode.ImmediateInputMode, nil)
+	ih, err := os.NewInputHandler(os.ImmediateInputMode, nil)
 	if err != nil {
 		panic(err)
 	}

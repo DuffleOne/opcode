@@ -2,6 +2,7 @@ package applications
 
 import (
 	"opcode"
+	"opcode/memory"
 )
 
 var Add = &AddApp{}
@@ -20,7 +21,7 @@ func (a *AddApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error) 
 	val := p1 + p2
 
 	os.Debug("%02d (add): %d + %d = %d -> %d\n", c.Code, p1, p2, val, ptr)
-	os.Debug("\t%d was %d, now %d\n", ptr, os.Memory().GetIndex(ptr, opcode.PositionMode), val)
+	os.Debug("\t%d was %d, now %d\n", ptr, os.Memory().GetIndex(ptr, memory.PositionMode), val)
 
 	os.Memory().Set(ptr, val)
 

@@ -2,6 +2,7 @@ package applications
 
 import (
 	"errors"
+	"opcode/memory"
 
 	"opcode"
 )
@@ -24,7 +25,7 @@ func (a *InputApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error
 	p := os.Memory().GetIndex(cursor+1, c.Param1Mode)
 
 	os.Debug("%02d (input): val: %d, ptr: %d\n", c.Code, val, p)
-	os.Debug("\t%d was %d, now %d\n", p, os.Memory().GetIndex(p, opcode.PositionMode), val)
+	os.Debug("\t%d was %d, now %d\n", p, os.Memory().GetIndex(p, memory.PositionMode), val)
 
 	os.Memory().Set(p, val)
 

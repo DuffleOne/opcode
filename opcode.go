@@ -6,12 +6,6 @@ import (
 	"strconv"
 )
 
-const (
-	PositionMode = 0
-	ImmediateMde = 1
-	RelativeMode = 2
-)
-
 type OPCode struct {
 	Code       int
 	Param1Mode int

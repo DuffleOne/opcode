@@ -2,6 +2,7 @@ package applications
 
 import (
 	"opcode"
+	"opcode/memory"
 )
 
 var LessThan = &LessThanApp{}
@@ -19,13 +20,13 @@ func (a *LessThanApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, er
 
 	if val1 < val2 {
 		os.Debug("%02d (lt): %d < %d\n", c.Code, val1, val2)
-		os.Debug("\t%d was %d, now %d\n", ptr, os.Memory().GetIndex(ptr, opcode.PositionMode), 1)
+		os.Debug("\t%d was %d, now %d\n", ptr, os.Memory().GetIndex(ptr, memory.PositionMode), 1)
 
 		os.Memory().Set(ptr, 1)
 	} else {
 
 		os.Debug("%02d (lt): %d >= %d\n", c.Code, val1, val2)
-		os.Debug("\t%d was %d, now %d\n", ptr, os.Memory().GetIndex(ptr, opcode.PositionMode), 0)
+		os.Debug("\t%d was %d, now %d\n", ptr, os.Memory().GetIndex(ptr, memory.PositionMode), 0)
 
 		os.Memory().Set(ptr, 0)
 	}

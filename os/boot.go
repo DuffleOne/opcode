@@ -2,12 +2,14 @@ package os
 
 import (
 	"fmt"
-	"opcode"
 	"strconv"
 	"strings"
+
+	"opcode"
+	"opcode/memory"
 )
 
-func BootFromString(debug bool, ih *opcode.InputHandler, apps []opcode.Application, startMemory string) (*OS, error) {
+func BootFromString(debug bool, ih *InputHandler, apps []opcode.Application, startMemory string) (*OS, error) {
 	var mem []int
 
 	parts := strings.Split(startMemory, ",")
@@ -24,15 +26,15 @@ func BootFromString(debug bool, ih *opcode.InputHandler, apps []opcode.Applicati
 	return Boot(debug, ih, apps, mem), nil
 }
 
-func Boot(debug bool, ih *opcode.InputHandler, apps []opcode.Application, startMemory []int) *OS {
+func Boot(debug bool, ih *InputHandler, apps []opcode.Application, startMemory []int) *OS {
 	var err error
 
-	ms := opcode.NewMemStore(startMemory, opcode.IntP(2048))
+	ms := memory.NewRAMStore(startMemory, opcode.IntP(2048))
 
 	maps := map[int]opcode.Application{}
 
 	if ih == nil {
-		ih, err = opcode.NewInputHandler(opcode.ImmediateInputMode, nil)
+		ih, err = NewInputHandler(ImmediateInputMode, nil)
 		if err != nil {
 			panic(fmt.Errorf("cannot make default input handler: %w", err))
 		}

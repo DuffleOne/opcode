@@ -6,17 +6,18 @@ import (
 	"strings"
 
 	"opcode"
+	"opcode/memory"
 )
 
 type OS struct {
 	debug        bool
-	memory       *opcode.MemoryStore
+	memory       memory.Memory
 	Applications map[int]opcode.Application
-	inputHandler *opcode.InputHandler
+	inputHandler *InputHandler
 	stdOut       []string
 }
 
-func (os *OS) Memory() *opcode.MemoryStore {
+func (os *OS) Memory() memory.Memory {
 	return os.memory
 }
 
@@ -54,7 +55,7 @@ func (os *OS) WriteOut() {
 func (os *OS) Run() error {
 	for {
 		addr, b := os.memory.Next()
-		opc, err := opcode.BuildOPCode(os.memory.GetIndex(addr, opcode.PositionMode))
+		opc, err := opcode.BuildOPCode(os.memory.GetIndex(addr, memory.PositionMode))
 		if err != nil {
 			return err
 		}

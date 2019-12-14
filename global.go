@@ -2,6 +2,7 @@ package opcode
 
 import (
 	"errors"
+	"opcode/memory"
 )
 
 var ErrHalt = errors.New("halt")
@@ -18,7 +19,7 @@ type Application interface {
 type OS interface {
 	GetInput() (int, bool)
 	Debug(string, ...interface{})
-	Memory() *MemoryStore
+	Memory() memory.Memory
 	Println(interface{})
 	StdOut(string) string
 	WriteOut()
