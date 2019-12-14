@@ -3,6 +3,7 @@ package applications
 import (
 	"opcode"
 	"opcode/memory"
+	opc "opcode/opcode"
 )
 
 var LessThan = &LessThanApp{}
@@ -13,7 +14,7 @@ func (a *LessThanApp) Opcode() int {
 	return 7
 }
 
-func (a *LessThanApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error) {
+func (a *LessThanApp) Exec(os opcode.OS, c *opc.OPCode, cursor int) (*int, error) {
 	val1 := os.Memory().GetAt(cursor+1, c.Param1Mode)
 	val2 := os.Memory().GetAt(cursor+2, c.Param2Mode)
 	ptr := os.Memory().GetIndex(cursor+3, c.Param3Mode)

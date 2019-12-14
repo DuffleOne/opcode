@@ -2,6 +2,7 @@ package applications
 
 import (
 	"opcode"
+	opc "opcode/opcode"
 )
 
 var JumpIfFalse = &JumpIfFalseApp{}
@@ -12,7 +13,7 @@ func (a *JumpIfFalseApp) Opcode() int {
 	return 6
 }
 
-func (a *JumpIfFalseApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error) {
+func (a *JumpIfFalseApp) Exec(os opcode.OS, c *opc.OPCode, cursor int) (*int, error) {
 	val := os.Memory().GetAt(cursor+1, c.Param1Mode)
 	ptr := os.Memory().GetAt(cursor+2, c.Param2Mode)
 

@@ -2,9 +2,10 @@ package applications
 
 import (
 	"errors"
-	"opcode/memory"
 
 	"opcode"
+	"opcode/memory"
+	opc "opcode/opcode"
 )
 
 var Input = &InputApp{}
@@ -15,7 +16,7 @@ func (a *InputApp) Opcode() int {
 	return 3
 }
 
-func (a *InputApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error) {
+func (a *InputApp) Exec(os opcode.OS, c *opc.OPCode, cursor int) (*int, error) {
 	val, ok := os.GetInput()
 
 	if !ok {

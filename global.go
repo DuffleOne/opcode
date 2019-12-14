@@ -3,6 +3,7 @@ package opcode
 import (
 	"errors"
 	"opcode/memory"
+	"opcode/opcode"
 )
 
 var ErrHalt = errors.New("halt")
@@ -13,7 +14,7 @@ func IntP(i int) *int {
 
 type Application interface {
 	Opcode() int
-	Exec(os OS, opcode *OPCode, cursor int) (*int, error)
+	Exec(os OS, opcode *opcode.OPCode, cursor int) (*int, error)
 }
 
 type OS interface {

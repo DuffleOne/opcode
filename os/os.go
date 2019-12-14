@@ -7,6 +7,7 @@ import (
 
 	"opcode"
 	"opcode/memory"
+	opc "opcode/opcode"
 )
 
 type OS struct {
@@ -55,7 +56,7 @@ func (os *OS) WriteOut() {
 func (os *OS) Run() error {
 	for {
 		addr, b := os.memory.Next()
-		opc, err := opcode.BuildOPCode(os.memory.GetIndex(addr, memory.PositionMode))
+		opc, err := opc.BuildOPCode(os.memory.GetIndex(addr, memory.PositionMode))
 		if err != nil {
 			return err
 		}

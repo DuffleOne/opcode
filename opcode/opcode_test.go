@@ -1,6 +1,8 @@
 package opcode
 
-import "testing"
+import (
+	"testing"
+)
 
 type opcodetest struct {
 	In  int

@@ -3,6 +3,7 @@ package applications
 import (
 	"opcode"
 	"opcode/memory"
+	opc "opcode/opcode"
 )
 
 var Add = &AddApp{}
@@ -13,7 +14,7 @@ func (a *AddApp) Opcode() int {
 	return 1
 }
 
-func (a *AddApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error) {
+func (a *AddApp) Exec(os opcode.OS, c *opc.OPCode, cursor int) (*int, error) {
 	p1 := os.Memory().GetAt(cursor+1, c.Param1Mode)
 	p2 := os.Memory().GetAt(cursor+2, c.Param2Mode)
 	ptr := os.Memory().GetIndex(cursor+3, c.Param3Mode)

@@ -2,6 +2,7 @@ package applications
 
 import (
 	"opcode"
+	opc "opcode/opcode"
 )
 
 var Output = &OutputApp{}
@@ -12,7 +13,7 @@ func (a *OutputApp) Opcode() int {
 	return 4
 }
 
-func (a *OutputApp) Exec(os opcode.OS, c *opcode.OPCode, cursor int) (*int, error) {
+func (a *OutputApp) Exec(os opcode.OS, c *opc.OPCode, cursor int) (*int, error) {
 	val := os.Memory().GetAt(cursor+1, c.Param1Mode)
 
 	os.Println(val)
