@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"opcode"
+	"opcode/os"
 )
 
 type test struct {
@@ -91,7 +92,7 @@ func TestMain(t *testing.T) {
 			t.Error(err)
 		}
 
-		os, err := opcode.BootFromString(false, ih, DefaultApps, test.Start)
+		os, err := os.BootFromString(false, ih, DefaultApps, test.Start)
 		if err != nil {
 			t.Error(err)
 		}

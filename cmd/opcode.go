@@ -3,6 +3,7 @@ package main
 import (
 	"opcode"
 	"opcode/applications"
+	"opcode/os"
 )
 
 var DefaultApps = []opcode.Application{
@@ -28,7 +29,7 @@ func main() {
 		panic(err)
 	}
 
-	os := opcode.Boot(debug, ih, DefaultApps, start)
+	os := os.Boot(debug, ih, DefaultApps, start)
 
 	err = os.Run()
 	if err != nil {
