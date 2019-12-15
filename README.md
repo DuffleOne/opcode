@@ -14,6 +14,7 @@ It does include my puzzle input, but you can change that easily in `cmd/opcode.g
 - `06`: jump if false
 - `07`: less than
 - `08`: equals
+- `09`: adjust relative base
 - `99`: halt
 
 ## Run
