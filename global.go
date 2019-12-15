@@ -18,12 +18,12 @@ type Application interface {
 }
 
 type OS interface {
-	GetInput() (int, bool)
 	Debug(string, ...interface{})
 	Memory() memory.Memory
-	Println(interface{})
-	StdOut(string) string
-	WriteOut()
 	Run() error
 	Dump(*int) string
+	GetInput() (int, bool)
+	GetStdOut(string) string
+	Println(int)
+	Printf(string, ...interface{})
 }

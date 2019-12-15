@@ -11,11 +11,11 @@ import (
 )
 
 type OS struct {
-	debug        bool
-	memory       memory.Memory
-	Applications map[int]opcode.Application
-	inputHandler *InputHandler
-	stdOut       []string
+	debug         bool
+	memory        memory.Memory
+	Applications  map[int]opcode.Application
+	inputHandler  *InputHandler
+	outputHandler *OutputHandler
 }
 
 func (os *OS) Memory() memory.Memory {
@@ -26,30 +26,21 @@ func (os *OS) GetInput() (int, bool) {
 	return os.inputHandler.GetInput()
 }
 
+func (os *OS) GetStdOut(seperator string) string {
+	return os.outputHandler.GetStdOut(seperator)
+}
+
+func (os *OS) Printf(format string, args ...interface{}) {
+	os.outputHandler.Printf(format, args...)
+}
+
+func (os *OS) Println(arg int) {
+	os.outputHandler.Println(arg)
+}
+
 func (os *OS) Debug(format string, args ...interface{}) {
 	if os.debug {
 		fmt.Printf(format, args...)
-	}
-}
-
-func (os *OS) Println(o interface{}) {
-	switch v := o.(type) {
-	case int:
-		os.stdOut = append(os.stdOut, strconv.Itoa(v))
-	case string:
-		os.stdOut = append(os.stdOut, v)
-	default:
-		panic(fmt.Errorf("cannot push item of %t to []string", o))
-	}
-}
-
-func (os *OS) StdOut(seperator string) string {
-	return strings.Join(os.stdOut, seperator)
-}
-
-func (os *OS) WriteOut() {
-	for _, s := range os.stdOut {
-		fmt.Println(s)
 	}
 }
 

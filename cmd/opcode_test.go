@@ -82,27 +82,37 @@ func TestMain(t *testing.T) {
 	i := 0
 
 	for _, test := range tests {
+		i++
+
 		var err error
 		var ih *os.InputHandler
+		var oh *os.OutputHandler
 
 		if len(test.Input) > 0 {
 			ih, err = os.NewInputHandler(os.CachedInputMode, test.Input)
+			if err != nil {
+				t.Error(err)
+			}
 		}
 
-		if err != nil {
-			t.Error(err)
+		if len(test.Out) > 0 {
+			oh, err = os.NewOutputHandler(os.CachedOutputMode)
+			if err != nil {
+				t.Error(err)
+			}
 		}
 
 		mem, err := memory.NewRAMStore(test.Start, opcode.IntP(2048))
 		if err != nil {
-			panic(err)
+			t.Error(err)
 		}
 
 		os, err := os.Boot(os.OSBootParams{
-			Debug:        false,
-			Memory:       mem,
-			InputHandler: ih,
-			Applications: DefaultApps,
+			Debug:         false,
+			Memory:        mem,
+			InputHandler:  ih,
+			OutputHandler: oh,
+			Applications:  DefaultApps,
 		})
 		if err != nil {
 			t.Error(err)
@@ -121,13 +131,11 @@ func TestMain(t *testing.T) {
 		}
 
 		if test.Out != "" {
-			actual := os.StdOut(",")
+			actual := os.GetStdOut(",")
 			if actual != test.Out {
 				t.Errorf("unexpected stdOut for test %d", i)
 				t.Errorf("got:\n%s", actual)
 			}
 		}
-
-		i++
 	}
 }

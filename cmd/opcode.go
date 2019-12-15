@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"opcode"
 	"opcode/applications"
 	"opcode/memory"
@@ -42,5 +43,5 @@ func main() {
 		panic(err)
 	}
 
-	os.WriteOut()
+	fmt.Println(os.GetStdOut("\n"))
 }
