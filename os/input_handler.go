@@ -42,10 +42,6 @@ func NewInputHandler(mode int, cache []int) (*InputHandler, error) {
 	}, nil
 }
 
-func (i *InputHandler) SwitchMode(inputMode int) {
-	i.mode = inputMode
-}
-
 func (i *InputHandler) GetInput() (int, bool) {
 	switch i.mode {
 	case ImmediateInputMode:
