@@ -16,10 +16,10 @@ It does include my puzzle input, but you can change that easily in `cmd/opcode.g
 - `08`: equals
 - `99`: halt
 
-## Run
+## Run
 
 `go run cmd/opcode.go`
 
-## Test
+## Test
 
 `go test ./...`
