@@ -1,7 +1,6 @@
 package opcode
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -22,26 +21,16 @@ func BuildOPCode(in int) (*OPCode, error) {
 	var b int
 	var a int
 
-	switch len(strVal) {
-	case 1:
-		de, err = strconv.Atoi(strVal[len(strVal)-1:])
-	case 2:
-		de, err = strconv.Atoi(strVal[len(strVal)-2:])
-	case 3:
-		de, err = strconv.Atoi(strVal[len(strVal)-2:])
-		c, err = getAt(strVal, 3, 2)
-	case 4:
-		de, err = strconv.Atoi(strVal[len(strVal)-2:])
-		c, err = getAt(strVal, 3, 2)
-		b, err = getAt(strVal, 4, 3)
-	case 5:
-		de, err = strconv.Atoi(strVal[len(strVal)-2:])
-		c, err = getAt(strVal, 3, 2)
-		b, err = getAt(strVal, 4, 3)
-		a, err = getAt(strVal, 5, 4)
-	default:
-		return nil, errors.New("found an opcode thats too long")
+	strVal = fmt.Sprintf("%05s", strVal)
+
+	if len(strVal) > 5 {
+		return nil, fmt.Errorf("opcode too long")
 	}
+
+	de, err = strconv.Atoi(strVal[len(strVal)-2:])
+	c, err = getAt(strVal, 3, 2)
+	b, err = getAt(strVal, 4, 3)
+	a, err = getAt(strVal, 5, 4)
 
 	if err != nil {
 		return nil, err
