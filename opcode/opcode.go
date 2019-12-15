@@ -15,23 +15,33 @@ type OPCode struct {
 func BuildOPCode(in int) (*OPCode, error) {
 	strVal := strconv.Itoa(in)
 
-	var err error
-	var de int
-	var c int
-	var b int
-	var a int
-
 	strVal = fmt.Sprintf("%05s", strVal)
 
-	if len(strVal) > 5 {
-		return nil, fmt.Errorf("opcode too long")
+	if len(strVal) != 5 {
+		return nil, fmt.Errorf("malformed opcode")
 	}
 
-	de, err = strconv.Atoi(strVal[len(strVal)-2:])
-	c, err = getAt(strVal, 3, 2)
-	b, err = getAt(strVal, 4, 3)
-	a, err = getAt(strVal, 5, 4)
+	deStr := strVal[3:]
+	cStr := strVal[2:3]
+	bStr := strVal[1:2]
+	aStr := strVal[:1]
 
+	de, err := strconv.Atoi(deStr)
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := strconv.Atoi(cStr)
+	if err != nil {
+		return nil, err
+	}
+
+	b, err := strconv.Atoi(bStr)
+	if err != nil {
+		return nil, err
+	}
+
+	a, err := strconv.Atoi(aStr)
 	if err != nil {
 		return nil, err
 	}
