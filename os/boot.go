@@ -2,57 +2,43 @@ package os
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 
 	"opcode"
 	"opcode/memory"
 )
 
-func BootFromString(debug bool, ih *InputHandler, apps []opcode.Application, startMemory string) (*OS, error) {
-	var mem []int
+const DefaultMemorySize = 2048
 
-	parts := strings.Split(startMemory, ",")
-
-	for _, p := range parts {
-		n, err := strconv.Atoi(p)
-		if err != nil {
-			return nil, err
-		}
-
-		mem = append(mem, n)
-	}
-
-	return Boot(debug, ih, apps, mem), nil
+type OSBootParams struct {
+	Debug        bool
+	Memory       memory.Memory
+	InputHandler *InputHandler
+	Applications []opcode.Application
 }
 
-func Boot(debug bool, ih *InputHandler, apps []opcode.Application, startMemory []int) *OS {
+func Boot(params OSBootParams) (*OS, error) {
 	var err error
+	mapApps := map[int]opcode.Application{}
 
-	ms := memory.NewRAMStore(startMemory, opcode.IntP(2048))
+	for _, app := range params.Applications {
+		code := app.Opcode()
+		mapApps[code] = app
+	}
 
-	maps := map[int]opcode.Application{}
+	ih := params.InputHandler
 
 	if ih == nil {
 		ih, err = NewInputHandler(ImmediateInputMode, nil)
 		if err != nil {
-			panic(fmt.Errorf("cannot make default input handler: %w", err))
+			return nil, fmt.Errorf("cannot make default input handler: %w", err)
 		}
 	}
 
-	os := &OS{
-		debug:        debug,
-		memory:       ms,
+	return &OS{
+		debug:        params.Debug,
+		memory:       params.Memory,
 		stdOut:       []string{},
-		inputHandler: ih,
-	}
-
-	for _, app := range apps {
-		code := app.Opcode()
-		maps[code] = app
-	}
-
-	os.Applications = maps
-
-	return os
+		inputHandler: params.InputHandler,
+		Applications: mapApps,
+	}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"opcode"
+	"opcode/memory"
 	"opcode/os"
 )
 
@@ -92,7 +93,17 @@ func TestMain(t *testing.T) {
 			t.Error(err)
 		}
 
-		os, err := os.BootFromString(false, ih, DefaultApps, test.Start)
+		mem, err := memory.NewRAMStore(test.Start, opcode.IntP(2048))
+		if err != nil {
+			panic(err)
+		}
+
+		os, err := os.Boot(os.OSBootParams{
+			Debug:        false,
+			Memory:       mem,
+			InputHandler: ih,
+			Applications: DefaultApps,
+		})
 		if err != nil {
 			t.Error(err)
 		}

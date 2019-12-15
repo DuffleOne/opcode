@@ -6,11 +6,16 @@ type RAMEmulator struct {
 	v            []int
 }
 
-func NewRAMStore(start []int, defaultSize *int) *RAMEmulator {
+func NewRAMStore(startIn interface{}, defaultSize *int) (*RAMEmulator, error) {
+	start, err := handleBaseMemory(startIn)
+	if err != nil {
+		return nil, err
+	}
+
 	if defaultSize == nil {
 		return &RAMEmulator{
 			v: start,
-		}
+		}, nil
 	}
 
 	size := *defaultSize
@@ -23,7 +28,7 @@ func NewRAMStore(start []int, defaultSize *int) *RAMEmulator {
 
 	return &RAMEmulator{
 		v: s,
-	}
+	}, nil
 }
 
 func (ms *RAMEmulator) GetAt(pos, paramMode int) int {
