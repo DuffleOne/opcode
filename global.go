@@ -12,6 +12,10 @@ func IntP(i int) *int {
 	return &i
 }
 
+func StringP(i string) *string {
+	return &i
+}
+
 type Application interface {
 	Opcode() int
 	Exec(os OS, opcode *opcode.OPCode, cursor int) (*int, error)
