@@ -35,7 +35,7 @@ func handleBaseMemory(in interface{}) ([]int, error) {
 		parts := strings.Split(v, ",")
 
 		for _, p := range parts {
-			n, err := strconv.Atoi(p)
+			n, err := strconv.Atoi(strings.TrimSpace(p))
 			if err != nil {
 				return nil, err
 			}
@@ -46,6 +46,8 @@ func handleBaseMemory(in interface{}) ([]int, error) {
 		return mem, nil
 	case []int:
 		return v, nil
+	case []byte:
+		return handleBaseMemory(string(v))
 	default:
 		return nil, fmt.Errorf("cannot handle input memory type")
 	}
