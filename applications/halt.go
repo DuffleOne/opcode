@@ -14,5 +14,5 @@ func (a *HaltApp) Opcode() int {
 }
 
 func (a *HaltApp) Exec(os opcode.OS, _ *opc.OPCode, cursor int) (*int, error) {
-	return opcode.IntP(cursor + 1), opcode.ErrHalt
+	return nil, opcode.ErrHalt
 }
