@@ -53,15 +53,21 @@ func main() {
 		return
 	}
 
-	mem, err := memory.NewRAMStore(string(start), opcode.IntP(2048))
+	mem, err := memory.NewRAMStore(string(start), opcode.IntP(4096))
+	if err != nil {
+		panic(err)
+	}
+
+	oh, err := os.NewOutputHandler(os.CachedOutputMode)
 	if err != nil {
 		panic(err)
 	}
 
 	os, err := os.Boot(os.OSBootParams{
-		Debug:        false,
-		Memory:       mem,
-		Applications: DefaultApps,
+		Debug:         false,
+		Memory:        mem,
+		Applications:  DefaultApps,
+		OutputHandler: oh,
 	})
 	if err != nil {
 		panic(err)
@@ -72,7 +78,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(os.GetStdOut("\n"))
+	fmt.Println(os.GetStdOut(","))
 }
 
 func fileExists(filename string) bool {
